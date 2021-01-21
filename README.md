@@ -1,7 +1,7 @@
 ![Version](https://img.shields.io/github/v/release/jfamaral/Seatconnect?include_prereleases)
-![PyPi](https://img.shields.io/pypi/v/Seatconnect?label=latest%20pypi)
-![Downloads](https://img.shields.io/github/downloads/jfamaral/Seatconnect/total)
-![Downloads PyPi](https://img.shields.io/pypi/dm/Seatconnect)
+![PyPi](https://img.shields.io/pypi/v/seatconnect?label=latest%20pypi)
+![Downloads](https://img.shields.io/github/downloads/jfamaral/seatconnect/total)
+![Downloads PyPi](https://img.shields.io/pypi/dm/seatconnect)
 
 # SEAT Connect v1.0.0
 
