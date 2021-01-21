@@ -3,14 +3,14 @@
 ![Downloads](https://img.shields.io/github/downloads/lendy007/skodaconnect/total)
 ![Downloads PyPi](https://img.shields.io/pypi/dm/skodaconnect)
 
-# Skoda Connect v1.0.30
+# SEAT Connect v1.0.0
 
-Fork of https://github.com/robinostlund/volkswagencarnet where it was modified to support also Skoda Connect.
-Changes made to utilize the same API calls as the MySkoda mobile app.
+Fork of https://github.com/robinostlund/volkswagencarnet and https://github.com/lendy007/skodaconnectwhere it was modified to support also SEAT Connect.
+Changes made to utilize the same API calls as the SEAT CONNECT mobile app.
 
 ## Information
 
-Retrieve statistics about your Skoda from the Skoda Connect online service
+Retrieve statistics about your SEAT from the SEAT Connect online service
 
 No licence, public domain, no guarantees, feel free to use for anything. Please contribute improvements/bugfixes etc.
 
