@@ -1,13 +1,13 @@
-"""Constants for Skoda Connect library."""
+"""Constants for Seat Connect library."""
 
 BASE_SESSION = 'https://msg.volkswagen.de'
 BASE_AUTH = 'https://identity.vwgroup.io'
 CLIENT_ID = '7f045eee-7003-4379-9968-9355ed2adb06%40apps_vw-dilab_com'
 XCLIENT_ID = '28cd30c6-dee7-4529-a0e6-b1e07ff90b79'
 XAPPVERSION = '3.2.6'
-XAPPNAME = 'cz.skodaauto.connect'
+XAPPNAME = 'es.seatauto.connect'
 USER_AGENT = 'okhttp/3.7.0'
-APP_URI = 'skodaconnect://oidc.login/'
+APP_URI = 'seatconnect://oidc.login/'
 
 HEADERS_SESSION = {
     'Connection': 'keep-alive',
