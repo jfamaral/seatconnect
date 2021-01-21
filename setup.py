@@ -15,7 +15,7 @@ setuptools.setup(
     description='Communicate with Skoda Connect',
     author='lendy007',
     author_email='lendik@gmail.com',
-    url='https://github.com/lendy007/skodaconnect',
+    url='https://github.com/jfamaral/seatconnect',
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=setuptools.find_packages(),
