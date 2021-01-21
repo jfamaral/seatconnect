@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Communicate with Skoda Connect."""
-"""Fork of https://github.com/robinostlund/volkswagencarnet where it was modified to support also Skoda Connect"""
-"""Modified to utilize Skoda App API instead of Web API"""
+"""Communicate with Seat Connect."""
+"""Fork of https://github.com/robinostlund/volkswagencarnet where it was modified to support also Seat Connect"""
+"""Modified to utilize Seat App API instead of Web API"""
 import re
 import time
 import logging
@@ -17,8 +17,8 @@ from json import dumps as to_json
 import aiohttp
 from bs4 import BeautifulSoup
 from base64 import b64decode, b64encode
-from skodaconnect.utilities import read_config, json_loads
-from skodaconnect.vehicle import Vehicle
+from seatconnect.utilities import read_config, json_loads
+from seatconnect.vehicle import Vehicle
 
 from aiohttp import ClientSession, ClientTimeout
 from aiohttp.hdrs import METH_GET, METH_POST
@@ -43,7 +43,7 @@ _LOGGER = logging.getLogger(__name__)
 TIMEOUT = timedelta(seconds=30)
 
 class Connection:
-    """ Connection to Skoda connect """
+    """ Connection to Seat connect """
   # Init connection class
     def __init__(self, session, username, password, guest_lang='en'):
         """ Initialize """
@@ -106,7 +106,7 @@ class Connection:
             authissuer = response_data['issuer']
 
             # Get authorization
-            # https://identity.vwgroup.io/oidc/v1/authorize?nonce=yVOPHxDmksgkMo1HDUp6IIeGs9HvWSSWbkhPcxKTGNU&response_type=code id_token token&scope=openid mbb&ui_locales=de&redirect_uri=skodaconnect://oidc.login/&client_id=7f045eee-7003-4379-9968-9355ed2adb06%40apps_vw-dilab_com
+            # https://identity.vwgroup.io/oidc/v1/authorize?nonce=yVOPHxDmksgkMo1HDUp6IIeGs9HvWSSWbkhPcxKTGNU&response_type=code id_token token&scope=openid mbb&ui_locales=de&redirect_uri=seatconnect://oidc.login/&client_id=7f045eee-7003-4379-9968-9355ed2adb06%40apps_vw-dilab_com
             params = {
                 'nonce': getNonce(),
                 'response_type':  'code id_token token',
@@ -173,7 +173,7 @@ class Connection:
                         _LOGGER.warning('Should have gotten a token by now.')
                         return False
             except:
-                # If we get excepted it should be because we can't redirect to the skodaconnect:// URL
+                # If we get excepted it should be because we can't redirect to the seatconnect:// URL
                 _LOGGER.debug('Got code: %s' % ref)
                 pass
 
@@ -182,11 +182,11 @@ class Connection:
             jwt_access_token = parse_qs(urlparse(ref).fragment).get('access_token')[0]
             jwt_id_token = parse_qs(urlparse(ref).fragment).get('id_token')[0]
 
-            # Exchange Auth code for Skoda tokens
+            # Exchange Auth code for Seat tokens
             tokenBody = {
                 'auth_code': jwt_auth_code,
                 'id_token':  jwt_id_token,
-                'brand': 'skoda'
+                'brand': 'seat'
             }
             tokenURL = 'https://tokenrefreshservice.apps.emea.vwapps.io/exchangeAuthCode'
             req = await self._session.post(
@@ -239,13 +239,13 @@ class Connection:
             return True
 
         except Exception as error:
-            _LOGGER.error('Failed to login to Skoda Connect, %s' % error)
+            _LOGGER.error('Failed to login to Seat Connect, %s' % error)
             self._session_logged_in = False
             return False
 
   # HTTP methods to API
     async def _request(self, method, url, **kwargs):
-        """Perform a query to the Skoda Connect service"""
+        """Perform a query to the Seat Connect service"""
         _LOGGER.debug('Request for %s', url)
         async with self._session.request(
             method,
@@ -314,7 +314,7 @@ class Connection:
         """Update status."""
         try:
             if not await self.validate_tokens:
-                _LOGGER.info('Session has expired. Initiating new login to Skoda Connect.')
+                _LOGGER.info('Session has expired. Initiating new login to Seat Connect.')
                 await self._login()
 
             if not self._session_first_update:
@@ -324,7 +324,7 @@ class Connection:
                 if 'Content-Type' in self._session_headers:
                     del self._session_headers['Content-Type']
                 loaded_vehicles = await self.get(
-                    url='https://msg.volkswagen.de/fs-car/usermanagement/users/v1/skoda/CZ/vehicles'
+                    url='https://msg.volkswagen.de/fs-car/usermanagement/users/v1/Seat/ES/vehicles'
                 )
                 _LOGGER.debug('URL loaded')
 
@@ -344,7 +344,7 @@ class Connection:
                 await vehicle.update()
             return True
         except (IOError, OSError, LookupError) as error:
-            _LOGGER.warning(f'Could not update information from skoda connect: {error}')
+            _LOGGER.warning(f'Could not update information from Seat connect: {error}')
 
     async def update_vehicle(self, vehicle):
         """Update data from VWG servers for given vehicle."""
@@ -380,7 +380,7 @@ class Connection:
         _LOGGER.debug('Getting homeregion for %s' % vin)
         try:
             await self.set_token('vwg')
-            response = await self.get('https://mal-1a.prd.ece.vwg-connect.com/api/cs/vds/v1/vehicles/$vin/homeRegion', vin)
+            response = await self.get('https://my.seat/portal/api/v1/vehicles/$vin/homeRegion', vin)
             self._session_auth_ref_url = response['homeRegion']['baseUri']['content'].split('/api')[0].replace('mal-', 'fal-') if response['homeRegion']['baseUri']['content'] != 'https://mal-1a.prd.ece.vwg-connect.com/api' else 'https://msg.volkswagen.de'
             self._session_spin_ref_url = response['homeRegion']['baseUri']['content'].split('/api')[0]
         except aiohttp.client_exceptions.ClientResponseError as err:
@@ -433,7 +433,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/promoter/portfolio/v1/skoda/CZ/vehicle/$vin/carportdata',
+                'api/v1/vehicles/$vin/carportdata',
                 vin=vin
             )
             if response.get('carportData', {}) :
@@ -461,7 +461,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/vsr/v1/skoda/CZ/vehicles/$vin/status',
+                'api/v1/vehicles/$vin/status',
                 vin=vin
             )
             if response.get('StoredVehicleDataResponse', {}).get('vehicleData', {}).get('data', {})[0].get('field', {})[0] :
@@ -492,7 +492,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/tripstatistics/v1/skoda/CZ/vehicles/$vin/tripdata/shortTerm?newest',
+                'api/v1/vehicles/$vin/tripdata/shortTerm?newest',
                 vin=vin
             )
             if response.get('tripData', {}):
@@ -520,7 +520,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/cf/v1/skoda/CZ/vehicles/$vin/position',
+                'api/v1/vehicles/$vin/position',
                 vin=vin
             )
             if response.get('findCarResponse', {}) :
@@ -565,7 +565,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/departuretimer/v1/skoda/CZ/vehicles/$vin/timer',
+                'api/v1/vehicles/$vin/timer',
                 vin=vin
             )
             if response.get('timer', {}):
@@ -593,7 +593,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/climatisation/v1/skoda/CZ/vehicles/$vin/climater',
+                'api/v1/vehicles/$vin/climater',
                 vin=vin
             )
             if response.get('climater', {}):
@@ -624,7 +624,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/batterycharge/v1/skoda/CZ/vehicles/$vin/charger',
+                'api/v1/vehicles/$vin/charger',
                 vin=vin
             )
             if response.get('charger', {}):
@@ -655,7 +655,7 @@ class Connection:
         try:
             await self.set_token('vwg')
             response = await self.get(
-                'fs-car/bs/rs/v1/skoda/CZ/vehicles/$vin/status',
+                'api/v1/vehicles/$vin/status',
                 vin=vin
             )
             if response.get('statusResponse', {}) :
@@ -761,7 +761,7 @@ class Connection:
 
             body = {
                 'grant_type': 'refresh_token',
-                'brand': 'Skoda',
+                'brand': 'Seat',
                 'refresh_token': self._session_tokens['identity']['refresh_token']
             }
             response = await self._session.post(
@@ -777,7 +777,7 @@ class Connection:
                 for token in tokens:
                     self._session_tokens['identity'][token] = tokens[token]
             else:
-                _LOGGER.warning('Something went wrong when refreshing Skoda tokens.')
+                _LOGGER.warning('Something went wrong when refreshing Seat tokens.')
                 return False
 
             body = {
