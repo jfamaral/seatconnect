@@ -10,11 +10,11 @@ def local_scheme(version):
     return ""
 
 setuptools.setup(
-    name='skodaconnect',
+    name='seatconnect',
     version='1.0.30',
-    description='Communicate with Skoda Connect',
+    description='Communicate with Seat Connect',
     author='lendy007',
-    author_email='lendik@gmail.com',
+    author_email='jfamaral@gmail.com',
     url='https://github.com/jfamaral/seatconnect',
     long_description=long_description,
     long_description_content_type='text/markdown',
