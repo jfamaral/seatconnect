@@ -1,11 +1,11 @@
-![Version](https://img.shields.io/github/v/release/lendy007/skodaconnect?include_prereleases)
-![PyPi](https://img.shields.io/pypi/v/skodaconnect?label=latest%20pypi)
-![Downloads](https://img.shields.io/github/downloads/lendy007/skodaconnect/total)
-![Downloads PyPi](https://img.shields.io/pypi/dm/skodaconnect)
+![Version](https://img.shields.io/github/v/release/lendy007/Seatconnect?include_prereleases)
+![PyPi](https://img.shields.io/pypi/v/Seatconnect?label=latest%20pypi)
+![Downloads](https://img.shields.io/github/downloads/lendy007/Seatconnect/total)
+![Downloads PyPi](https://img.shields.io/pypi/dm/Seatconnect)
 
 # SEAT Connect v1.0.0
 
-Fork of https://github.com/robinostlund/volkswagencarnet and https://github.com/lendy007/skodaconnectwhere it was modified to support also SEAT Connect.
+Fork of https://github.com/robinostlund/volkswagencarnet and https://github.com/lendy007/Seatconnectwhere it was modified to support also SEAT Connect.
 Changes made to utilize the same API calls as the SEAT CONNECT mobile app.
 
 ## Information
@@ -34,20 +34,20 @@ Heating is used for heating and ventilation for fan/climatisation/cooling or wha
 
 ## Other related repositories
 
-- [HomeAssistant Component](https://github.com/lendy007/homeassistant-skodaconnect) a custom component for Home Assistant
+- [HomeAssistant Component](https://github.com/lendy007/homeassistant-Seatconnect) a custom component for Home Assistant
 
 ## Installation
 
 ```sh
 [venv-python3] user@localhost:~
-$ pip install skodaconnect
+$ pip install Seatconnect
 ```
 
 ### Example
 
 ```python
 #!/usr/bin/env python3
-import skodaconnect
+import Seatconnect
 import pprint
 import asyncio
 import logging
@@ -115,7 +115,7 @@ def is_enabled(attr):
 async def main():
     """Main method."""
     async with ClientSession(headers={'Connection': 'keep-alive'}) as session:
-        connection = skodaconnect.Connection(session, USERNAME, PASSWORD)
+        connection = Seatconnect.Connection(session, USERNAME, PASSWORD)
         if await connection._login():
             if await connection.update():
                 # Print overall state
