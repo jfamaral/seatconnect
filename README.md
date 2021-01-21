@@ -14,27 +14,16 @@ Retrieve statistics about your SEAT from the SEAT Connect online service
 
 No licence, public domain, no guarantees, feel free to use for anything. Please contribute improvements/bugfixes etc.
 
-## Breaking changes
-
-Major code changes have been made to consolidate functions and also enable auxiliary climatisation for PHEV vehicles.
-Names have been changed to avoid confusion when working with the code.
-
-- **From version 1.0.30** and onwards there might be breaking changes for the combustion heating/climatisation.
-
-- **Parking Heater** is the auxiliary/parking heater for **non-PHEV** vehicles. This uses the "legacy" remotestandheizung API function.
-Heating is used for heating and ventilation for fan/climatisation/cooling or whatever it is called.
-
-- **Auxiliary Heater** is the auxiliary/parking heater for **PHEV** vehicles. This uses the climater API function, same as electric climatisation.
-
 ## Thanks to
 
 - [RobinostLund](https://github.com/robinostlund/volkswagencarnet) for initial project for Volkswagen Carnet I was able to fork
 - [Farfar](https://github.com/Farfar) for modifications related to electric engines
 - [tanelvakker](https://github.com/tanelvakker) for modifications related to correct SPIN handling for various actions and using correct URLs also for MY2021
+- [lendy007] (https://github.com/lendy007) for the modifications for skodaconnect to help this version of Seat connect
 
 ## Other related repositories
 
-- [HomeAssistant Component](https://github.com/lendy007/homeassistant-Seatconnect) a custom component for Home Assistant
+- [HomeAssistant Component](https://github.com/jfamaral/homeassistant-Seatconnect) a custom component for Home Assistant
 
 ## Installation
 
